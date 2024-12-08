@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import * as cdk from 'aws-cdk-lib';
-import { SpeedtestTrackerStack } from '../lib/speedtest_tracker-stack';
+import { SpeedtestTrackerStack } from '../lib/speedtest-tracker-stack';
 
 const app = new cdk.App();
 new SpeedtestTrackerStack(app, 'SpeedtestTrackerStack', {
