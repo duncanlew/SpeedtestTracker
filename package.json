@@ -1,8 +1,8 @@
 {
-  "name": "speedtest_tracker",
+  "name": "speedtest-tracker",
   "version": "0.1.0",
   "bin": {
-    "speedtest_tracker": "bin/speedtest_tracker.js"
+    "speedtest-tracker": "bin/speedtest-tracker.js"
   },
   "scripts": {
     "build": "tsc",
