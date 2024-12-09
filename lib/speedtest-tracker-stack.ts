@@ -8,11 +8,6 @@ import {NodejsFunction} from "aws-cdk-lib/aws-lambda-nodejs";
 export class SpeedtestTrackerStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps){
     super(scope, id, props)
-    // const fn = new lambda.Function(this, 'SaveSpeedtestFunction', {
-    //   runtime: lambda.Runtime.NODEJS_LATEST,
-    //   handler: 'index.handler',
-    //   code: lambda.Code.fromAsset(path.join(__dirname, 'lambda-handler')),
-    // });
 
     const fn = new NodejsFunction(this, 'SaveSpeedtestFunction', {
       entry: path.resolve(__dirname, 'lambda-handler/index.js'),
@@ -24,8 +19,6 @@ export class SpeedtestTrackerStack extends cdk.Stack {
       handler: fn,
       restApiName: `SpeedtestTrackerApi`,
     });
-
-
 
   }
 }
