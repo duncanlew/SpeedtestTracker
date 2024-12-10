@@ -1,7 +1,7 @@
 import axios from "axios";
-import {APIGatewayProxyEvent, APIGatewayProxyHandler, Context} from "aws-lambda";
+import {APIGatewayProxyEvent, APIGatewayProxyHandler, APIGatewayProxyResult, Context} from "aws-lambda";
 
-export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent, context: Context) => {
+export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent, context: Context): Promise<APIGatewayProxyResult> => {
     try {
         // Extract specific properties from the event object
         const { resource, path, httpMethod, headers, queryStringParameters, body } = event;
@@ -15,7 +15,7 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
             headers,
             queryStringParameters,
             body,
-            typescriptTodos: axiosResponse.data,
+            todos: axiosResponse.data,
         };
 
         return {
