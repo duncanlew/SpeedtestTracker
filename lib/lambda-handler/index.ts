@@ -1,13 +1,13 @@
-const axios = require("axios");
+import axios, {AxiosResponse} from "axios";
+import {APIGatewayProxyEvent, APIGatewayProxyHandler, APIGatewayProxyResult, Context} from "aws-lambda";
+import {Todo} from "../models/todo.interface";
 
-exports.handler = async (event) => {
-
+export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent, context: Context): Promise<APIGatewayProxyResult> => {
     try {
         // Extract specific properties from the event object
         const { resource, path, httpMethod, headers, queryStringParameters, body } = event;
 
-        const axiosResponse = await axios.get('https://jsonplaceholder.typicode.com/todos/1');
-
+        const axiosResponse: AxiosResponse<Todo> = await axios.get<Todo>('https://jsonplaceholder.typicode.com/todos/1');
         const response = {
             resource,
             path,
@@ -15,8 +15,7 @@ exports.handler = async (event) => {
             headers,
             queryStringParameters,
             body,
-            todos: axiosResponse.data,
-
+            todo: axiosResponse.data,
         };
 
         return {
@@ -30,5 +29,4 @@ exports.handler = async (event) => {
             body: JSON.stringify(error),
         }
     }
-
-};
+}
