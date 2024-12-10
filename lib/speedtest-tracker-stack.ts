@@ -10,9 +10,9 @@ export class SpeedtestTrackerStack extends cdk.Stack {
     super(scope, id, props)
 
     const fn = new NodejsFunction(this, 'SaveSpeedtestFunction', {
-      entry: path.resolve(__dirname, 'lambda-handler/index.js'),
+      entry: path.resolve(__dirname, 'lambda-handler/index.ts'),
       runtime: lambda.Runtime.NODEJS_LATEST,
-      handler: 'index.handler',
+      handler: 'handler',
     })
 
     const endpoint = new apigw.LambdaRestApi(this, `ApiGwEndpoint`, {
