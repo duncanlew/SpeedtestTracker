@@ -23,6 +23,7 @@ export class SpeedtestTrackerStack extends cdk.Stack {
 
     const table = new dynamodb.TableV2(this, 'Table', {
       partitionKey: { name: 'pk', type: dynamodb.AttributeType.STRING },
+      sortKey: { name: 'epochTime', type: dynamodb.AttributeType.NUMBER },
       tableName: "speedtest-tracker",
     });
 

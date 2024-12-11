@@ -13,12 +13,14 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
         const { resource, path, httpMethod, headers, queryStringParameters, body } = event;
 
         const axiosResponse: AxiosResponse<Todo> = await axios.get<Todo>('https://jsonplaceholder.typicode.com/todos/1');
+        const now = new Date();
         const command = new PutCommand({
             TableName: "speedtest-tracker",
             Item: {
                 pk: "Shiba Inu",
+                epochTime: toEpochSeconds(now.getTime()),
+                date: now.toLocaleDateString('nl-NL'),
                 payload: "dummy data",
-                date: new Date().toISOString(),
             },
         });
 
@@ -46,3 +48,7 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
         }
     }
 }
+
+const toEpochSeconds = (epochMs: number) => {
+    return Math.floor(epochMs / 1000);
+};
