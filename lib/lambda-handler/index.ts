@@ -18,7 +18,7 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
             Item: {
                 pk: "Shiba Inu",
                 payload: "dummy data",
-
+                date: new Date().toISOString(),
             },
         });
 
