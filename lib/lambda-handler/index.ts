@@ -17,7 +17,8 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
             TableName: "speedtest-tracker",
             Item: {
                 pk: "Shiba Inu",
-                payload: "dummy data"
+                payload: "dummy data",
+
             },
         });
 
