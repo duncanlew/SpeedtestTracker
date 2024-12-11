@@ -26,5 +26,7 @@ export class SpeedtestTrackerStack extends cdk.Stack {
       tableName: "speedtest-tracker",
     });
 
+    table.grantReadWriteData(fn);
+
   }
 }
