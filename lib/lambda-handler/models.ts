@@ -4,3 +4,7 @@ export interface Todo {
     title: string;
     completed: boolean;
 }
+
+export interface SpeedtestTrackerPayload {
+    pk: string;
+}
