@@ -5,8 +5,10 @@ import {getItems, putItem} from "./dynamodb";
 
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent, context: Context): Promise<APIGatewayProxyResult> => {
     try {
-        // Extract specific properties from the event object
-        const { resource, path, httpMethod, headers, queryStringParameters, body } = event;
+        const body = event.body;
+        console.log('what is is in the body:');
+        console.log(body);
+
 
         const axiosResponse: AxiosResponse<Todo> = await axios.get<Todo>('https://jsonplaceholder.typicode.com/todos/1');
         const todo = axiosResponse.data
@@ -14,11 +16,6 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
         const getResponse = await getItems('placeholder');
 
         const response = {
-            resource,
-            path,
-            httpMethod,
-            headers,
-            queryStringParameters,
             body,
             todo,
             putResponse,
@@ -37,5 +34,9 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
             body: JSON.stringify(error),
         }
     }
+}
+
+const logEvent = (event: APIGatewayProxyEvent) => {
+    console.log('Incoming event:', event);
 }
 
