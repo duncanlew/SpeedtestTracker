@@ -2,7 +2,6 @@ import {DynamoDBClient} from "@aws-sdk/client-dynamodb";
 import {DynamoDBDocumentClient, PutCommand} from "@aws-sdk/lib-dynamodb";
 import {Todo} from "../models/todo.interface";
 
-
 const client = new DynamoDBClient({});
 const docClient = DynamoDBDocumentClient.from(client);
 
