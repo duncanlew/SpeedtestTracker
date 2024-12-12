@@ -1,6 +1,6 @@
 import axios, {AxiosResponse} from "axios";
 import {APIGatewayProxyEvent, APIGatewayProxyHandler, APIGatewayProxyResult, Context} from "aws-lambda";
-import {Todo} from "../models/todo.interface";
+import {Todo} from "./todo.interface";
 import {getItems, putItem} from "./dynamodb";
 
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent, context: Context): Promise<APIGatewayProxyResult> => {

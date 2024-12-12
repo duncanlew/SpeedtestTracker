@@ -1,6 +1,6 @@
 import {DynamoDBClient} from "@aws-sdk/client-dynamodb";
 import {DynamoDBDocumentClient, GetCommand, PutCommand, QueryCommand} from "@aws-sdk/lib-dynamodb";
-import {Todo} from "../models/todo.interface";
+import {Todo} from "./todo.interface";
 
 const TABLE_NAME = "speedtest-tracker"
 const client = new DynamoDBClient({});
