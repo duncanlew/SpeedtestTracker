@@ -1,5 +1,5 @@
 import {DynamoDBClient} from "@aws-sdk/client-dynamodb";
-import {DynamoDBDocumentClient, GetCommand, PutCommand} from "@aws-sdk/lib-dynamodb";
+import {DynamoDBDocumentClient, GetCommand, PutCommand, QueryCommand} from "@aws-sdk/lib-dynamodb";
 import {Todo} from "../models/todo.interface";
 
 const TABLE_NAME = "speedtest-tracker"
@@ -22,17 +22,19 @@ export const putItem = async (todo: Todo) => {
     return await docClient.send(command);
 }
 
-export const getItem = async (id: string) => {
-    const command = new GetCommand({
-        TableName: TABLE_NAME,
-        Key: {
-            pk: "Shiba Inu",
-        },
-    });
+export const getItems = async (id: string) => {
+    const command = new QueryCommand({
+            TableName: TABLE_NAME,
+            KeyConditionExpression: "pk = :pk",
+            ExpressionAttributeValues: {
+                ":pk": "Shiba Inu",
+            }
+        }
+    )
 
     const response = await docClient.send(command);
     console.log(response);
-    return response;
+    return response.Items;
 }
 
 const toEpochSeconds = (epochMs: number) => {
