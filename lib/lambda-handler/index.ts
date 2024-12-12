@@ -3,6 +3,7 @@ import {APIGatewayProxyEvent, APIGatewayProxyHandler, APIGatewayProxyResult, Con
 import {Todo} from "../models/todo.interface";
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import {DynamoDBDocumentClient, PutCommand} from "@aws-sdk/lib-dynamodb";
+import {putItem} from "./dynamodb";
 
 const client = new DynamoDBClient({});
 const docClient = DynamoDBDocumentClient.from(client);
@@ -13,18 +14,8 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
         const { resource, path, httpMethod, headers, queryStringParameters, body } = event;
 
         const axiosResponse: AxiosResponse<Todo> = await axios.get<Todo>('https://jsonplaceholder.typicode.com/todos/1');
-        const now = new Date();
-        const command = new PutCommand({
-            TableName: "speedtest-tracker",
-            Item: {
-                pk: "Shiba Inu",
-                epochTime: toEpochSeconds(now.getTime()),
-                date: now.toLocaleDateString('nl-NL'),
-                payload: "dummy data",
-            },
-        });
-
-        const dynamoResponse = await docClient.send(command);
+        const todo = axiosResponse.data
+        const dynamoResponse = await putItem(todo);
 
         const response = {
             resource,
@@ -33,15 +24,17 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
             headers,
             queryStringParameters,
             body,
-            todo: axiosResponse.data,
+            todo,
             dynamoResponse
         };
+
         return {
             statusCode: 200,
             body: JSON.stringify(response, null, 2),
         };
     } catch (error) {
         console.error("Error in the lambda handler", error);
+
         return {
             statusCode: 500,
             body: JSON.stringify(error),
@@ -49,6 +42,3 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
     }
 }
 
-const toEpochSeconds = (epochMs: number) => {
-    return Math.floor(epochMs / 1000);
-};
