@@ -14,7 +14,7 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
         const axiosResponse: AxiosResponse<Todo> = await axios.get<Todo>('https://jsonplaceholder.typicode.com/todos/1');
         const todo = axiosResponse.data
         const putResponse = await putItem(todo);
-        const getResponse = await getItems('placeholder');
+        const getResponse = await getItems(speedtestTrackerPayload.pk);
 
         const response = {
             speedtestTrackerPayload,

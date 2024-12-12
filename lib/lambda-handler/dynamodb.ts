@@ -22,12 +22,12 @@ export const putItem = async (todo: Todo) => {
     return await docClient.send(command);
 }
 
-export const getItems = async (id: string) => {
+export const getItems = async (pk: string) => {
     const command = new QueryCommand({
             TableName: TABLE_NAME,
             KeyConditionExpression: "pk = :pk",
             ExpressionAttributeValues: {
-                ":pk": "Shiba Inu",
+                ":pk": pk,
             }
         }
     )
