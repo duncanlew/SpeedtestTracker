@@ -13,14 +13,15 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
         const { resource, path, httpMethod, headers, queryStringParameters, body } = event;
 
         const axiosResponse: AxiosResponse<Todo> = await axios.get<Todo>('https://jsonplaceholder.typicode.com/todos/1');
+        const todo = axiosResponse.data
         const now = new Date();
         const command = new PutCommand({
             TableName: "speedtest-tracker",
             Item: {
-                pk: "Shiba Inu",
+                pk: "AmazonePapegaai",
                 epochTime: toEpochSeconds(now.getTime()),
                 date: now.toLocaleDateString('nl-NL'),
-                payload: "dummy data",
+                payload: todo,
             },
         });
 
@@ -33,15 +34,17 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
             headers,
             queryStringParameters,
             body,
-            todo: axiosResponse.data,
+            todo,
             dynamoResponse
         };
+
         return {
             statusCode: 200,
             body: JSON.stringify(response, null, 2),
         };
     } catch (error) {
         console.error("Error in the lambda handler", error);
+
         return {
             statusCode: 500,
             body: JSON.stringify(error),
