@@ -1,13 +1,14 @@
 import axios, {AxiosResponse} from "axios";
 import {APIGatewayProxyEvent, APIGatewayProxyHandler, APIGatewayProxyResult, Context} from "aws-lambda";
-import {Todo} from "./todo.interface";
+import {SpeedtestTrackerPayload, Todo} from "./models";
 import {getItems, putItem} from "./dynamodb";
+import {SpeedtestTrackerValidationError} from "./errors";
 
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent, context: Context): Promise<APIGatewayProxyResult> => {
     try {
-        const body = event.body;
-        console.log('what is is in the body:');
-        console.log(body);
+        const speedtestTrackerPayload = extractPayload(event);
+        console.log('what is is in the speedtestTrackerPayload:');
+        console.log(speedtestTrackerPayload);
 
 
         const axiosResponse: AxiosResponse<Todo> = await axios.get<Todo>('https://jsonplaceholder.typicode.com/todos/1');
@@ -16,7 +17,7 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
         const getResponse = await getItems('placeholder');
 
         const response = {
-            body,
+            speedtestTrackerPayload,
             todo,
             putResponse,
             getResponse
@@ -29,14 +30,36 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
     } catch (error) {
         console.error("Error in the lambda handler", error);
 
+        let statusCode: number;
+        let message: string;
+
+        switch (true) {
+            case error instanceof SpeedtestTrackerValidationError:
+                statusCode = 400;
+                message = (error as SpeedtestTrackerValidationError).message;
+                break;
+            case error instanceof SyntaxError:
+                statusCode = 400;
+                message = (error as SyntaxError).message;
+                break;
+            default:
+                statusCode = 500;
+                message = `Unknown error occurred: ${error}`;
+                break;
+        }
+
         return {
-            statusCode: 500,
-            body: JSON.stringify(error),
+            statusCode,
+            body: JSON.stringify(message),
         }
     }
 }
 
-const logEvent = (event: APIGatewayProxyEvent) => {
-    console.log('Incoming event:', event);
+const extractPayload = (event: APIGatewayProxyEvent) => {
+    if (event.body === null) {
+        throw new SpeedtestTrackerValidationError("Payload may not be empty");
+    }
+
+    return JSON.parse(event.body) as SpeedtestTrackerPayload;
 }
 
