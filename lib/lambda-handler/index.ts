@@ -1,12 +1,7 @@
 import axios, {AxiosResponse} from "axios";
 import {APIGatewayProxyEvent, APIGatewayProxyHandler, APIGatewayProxyResult, Context} from "aws-lambda";
 import {Todo} from "../models/todo.interface";
-import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
-import {DynamoDBDocumentClient, PutCommand} from "@aws-sdk/lib-dynamodb";
-import {putItem} from "./dynamodb";
-
-const client = new DynamoDBClient({});
-const docClient = DynamoDBDocumentClient.from(client);
+import {getItems, putItem} from "./dynamodb";
 
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent, context: Context): Promise<APIGatewayProxyResult> => {
     try {
@@ -15,7 +10,8 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
 
         const axiosResponse: AxiosResponse<Todo> = await axios.get<Todo>('https://jsonplaceholder.typicode.com/todos/1');
         const todo = axiosResponse.data
-        const dynamoResponse = await putItem(todo);
+        const putResponse = await putItem(todo);
+        const getResponse = await getItems('placeholder');
 
         const response = {
             resource,
@@ -25,7 +21,8 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
             queryStringParameters,
             body,
             todo,
-            dynamoResponse
+            putResponse,
+            getResponse
         };
 
         return {
