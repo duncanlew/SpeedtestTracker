@@ -3,6 +3,7 @@ import {APIGatewayProxyEvent, APIGatewayProxyHandler, APIGatewayProxyResult, Con
 import {Todo} from "../models/todo.interface";
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import {DynamoDBDocumentClient, PutCommand} from "@aws-sdk/lib-dynamodb";
+import {putItem} from "./dynamodb";
 
 const client = new DynamoDBClient({});
 const docClient = DynamoDBDocumentClient.from(client);
@@ -14,18 +15,7 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
 
         const axiosResponse: AxiosResponse<Todo> = await axios.get<Todo>('https://jsonplaceholder.typicode.com/todos/1');
         const todo = axiosResponse.data
-        const now = new Date();
-        const command = new PutCommand({
-            TableName: "speedtest-tracker",
-            Item: {
-                pk: "AmazonePapegaai",
-                epochTime: toEpochSeconds(now.getTime()),
-                date: now.toLocaleDateString('nl-NL'),
-                payload: todo,
-            },
-        });
-
-        const dynamoResponse = await docClient.send(command);
+        const dynamoResponse = await putItem(todo);
 
         const response = {
             resource,
@@ -52,6 +42,3 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
     }
 }
 
-const toEpochSeconds = (epochMs: number) => {
-    return Math.floor(epochMs / 1000);
-};
