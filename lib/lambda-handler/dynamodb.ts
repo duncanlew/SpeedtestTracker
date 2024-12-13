@@ -1,21 +1,21 @@
 import {DynamoDBClient} from "@aws-sdk/client-dynamodb";
-import {DynamoDBDocumentClient, GetCommand, PutCommand, QueryCommand} from "@aws-sdk/lib-dynamodb";
-import {Todo} from "./models";
+import {DynamoDBDocumentClient, PutCommand, QueryCommand} from "@aws-sdk/lib-dynamodb";
+import {SpeedtestTrackerPayload} from "./models";
 
 const TABLE_NAME = "speedtest-tracker"
 const client = new DynamoDBClient({});
 const docClient = DynamoDBDocumentClient.from(client);
 
-export const putItem = async (todo: Todo) => {
+export const putItem = async (speedtestTrackerPayload: SpeedtestTrackerPayload) => {
     const now = new Date();
 
     const command = new PutCommand({
         TableName: TABLE_NAME,
         Item: {
-            pk: "AmazonePapegaai",
+            pk: speedtestTrackerPayload.pk,
             epochTime: toEpochSeconds(now.getTime()),
             date: now.toISOString(),
-            payload: todo,
+            payload: speedtestTrackerPayload.result,
         },
     });
 

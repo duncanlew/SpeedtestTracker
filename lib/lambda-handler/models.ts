@@ -7,4 +7,5 @@ export interface Todo {
 
 export interface SpeedtestTrackerPayload {
     pk: string;
+    result: any;
 }

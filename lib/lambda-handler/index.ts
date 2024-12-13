@@ -1,26 +1,19 @@
-import axios, {AxiosResponse} from "axios";
 import {APIGatewayProxyEvent, APIGatewayProxyHandler, APIGatewayProxyResult, Context} from "aws-lambda";
 import {SpeedtestTrackerPayload, Todo} from "./models";
-import {getItems, putItem} from "./dynamodb";
+import {putItem} from "./dynamodb";
 import {SpeedtestTrackerValidationError} from "./errors";
 
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent, context: Context): Promise<APIGatewayProxyResult> => {
     try {
         const speedtestTrackerPayload = extractPayload(event);
-        console.log('what is is in the speedtestTrackerPayload:');
+        console.log('SpeedtestTrackerPayload:');
         console.log(speedtestTrackerPayload);
 
-
-        const axiosResponse: AxiosResponse<Todo> = await axios.get<Todo>('https://jsonplaceholder.typicode.com/todos/1');
-        const todo = axiosResponse.data
-        const putResponse = await putItem(todo);
-        const getResponse = await getItems(speedtestTrackerPayload.pk);
+        const putResponse = await putItem(speedtestTrackerPayload);
 
         const response = {
             speedtestTrackerPayload,
-            todo,
             putResponse,
-            getResponse
         };
 
         return {
