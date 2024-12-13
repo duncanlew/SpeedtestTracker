@@ -14,7 +14,7 @@ export const putItem = async (todo: Todo) => {
         Item: {
             pk: "AmazonePapegaai",
             epochTime: toEpochSeconds(now.getTime()),
-            date: now.toLocaleDateString('nl-NL'),
+            date: now.toISOString(),
             payload: todo,
         },
     });
