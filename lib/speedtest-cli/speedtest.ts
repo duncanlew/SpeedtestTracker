@@ -37,8 +37,13 @@ function runSpeedtest(): Promise<any> {
             'x-api-key': 'YOUR_API_KEY_HERE' // Replace with your actual API key
         };
 
+        const payload = {
+            pk: 'pk',
+            result: speedtestResult
+        }
+
         // Make the POST request
-        const response = await axios.post(url, speedtestResult, { headers });
+        const response = await axios.post(url, payload, { headers });
 
         console.log('POST Response:', response.data);
 
