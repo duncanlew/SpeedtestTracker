@@ -14,11 +14,6 @@ export class SpeedtestTrackerStack extends cdk.Stack {
       entry: path.resolve(__dirname, 'lambda-handler/index.ts'),
       runtime: lambda.Runtime.NODEJS_LATEST,
       handler: 'handler',
-    })
-
-    const endpoint = new apigw.LambdaRestApi(this, `ApiGwEndpoint`, {
-      handler: fn,
-      restApiName: `SpeedtestTrackerApi`,
     });
 
     const table = new dynamodb.TableV2(this, 'Table', {
@@ -26,8 +21,34 @@ export class SpeedtestTrackerStack extends cdk.Stack {
       sortKey: { name: 'epochTime', type: dynamodb.AttributeType.NUMBER },
       tableName: "speedtest-tracker",
     });
-
     table.grantReadWriteData(fn);
 
+    const api = new apigw.LambdaRestApi(this, `ApiGwEndpoint`, {
+      handler: fn,
+      restApiName: `SpeedtestTrackerApi`,
+      deployOptions: {
+        stageName: 'prod',
+      },
+      defaultMethodOptions: {
+        apiKeyRequired: true,
+      }
+    });
+
+    const plan = api.addUsagePlan('UsagePlan', {
+      name: 'SpeedtestTrackerUsagePlan',
+      throttle: {
+        rateLimit: 10,
+        burstLimit: 2,
+      }
+    });
+
+    const apiKey = api.addApiKey('ApiKey', {
+      apiKeyName: 'SpeedtestTrackerApiKey',
+    });
+
+    plan.addApiKey(apiKey);
+    plan.addApiStage({
+      stage: api.deploymentStage
+    });
   }
 }
