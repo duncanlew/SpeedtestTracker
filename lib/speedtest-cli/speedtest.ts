@@ -42,31 +42,3 @@ export const saveSpeedTestResult = async (speedtestResult: any) => {
 
     console.log('POST Response:', response.data);
 }
-
-// Use the function and store the result
-(async () => {
-    try {
-        const speedtestResult = await runSpeedtest();
-        console.log('Speedtest Result:', speedtestResult);
-
-        // Add more operations here
-        const url = 'url';
-        const headers = {
-            'Content-Type': 'application/json',
-            'x-api-key': 'YOUR_API_KEY_HERE' // Replace with your actual API key
-        };
-
-        const payload = {
-            pk: 'pk',
-            result: speedtestResult
-        }
-
-        // Make the POST request
-        const response = await axios.post(url, payload, { headers });
-
-        console.log('POST Response:', response.data);
-
-    } catch (error) {
-        console.error(error);
-    }
-})();
