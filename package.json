@@ -9,7 +9,8 @@
     "watch": "tsc -w",
     "test": "jest",
     "cdk": "cdk",
-    "speedtest": "ts-node lib/speedtest-cli/index.ts"
+    "speedtest": "node build/speedtest-cli/index.js",
+    "build-speedtest": "esbuild lib/speedtest-cli/index.ts --bundle --platform=node --sourcemap --target=node22 --legal-comments=none --outfile=build/speedtest-cli/index.js"
   },
   "devDependencies": {
     "@aws-sdk/client-dynamodb": "^3.709.0",
