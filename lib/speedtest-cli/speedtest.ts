@@ -24,16 +24,14 @@ export function runSpeedtest(): Promise<any> {
     });
 }
 
-export const saveSpeedTestResult = async (speedtestResult: any) => {
-    // Add more operations here
-    const url = 'url';
+export const saveSpeedTestResult = async (speedtestResult: any, url: string, apiKey: string, address: string) => {
     const headers = {
         'Content-Type': 'application/json',
-        'x-api-key': 'YOUR_API_KEY_HERE' // Replace with your actual API key
+        'x-api-key':  apiKey
     };
 
     const payload = {
-        pk: 'pk',
+        pk: address,
         result: speedtestResult
     }
 

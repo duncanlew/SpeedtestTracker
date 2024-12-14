@@ -9,8 +9,7 @@
     "watch": "tsc -w",
     "test": "jest",
     "cdk": "cdk",
-    "speedtest": "ts-node lib/speedtest-cli/speedtest.ts",
-    "speedtest-cron": "ts-node lib/speedtest-cli/index.ts"
+    "speedtest": "ts-node lib/speedtest-cli/index.ts"
   },
   "devDependencies": {
     "@aws-sdk/client-dynamodb": "^3.709.0",
@@ -30,6 +29,7 @@
     "aws-cdk-lib": "2.172.0",
     "axios": "^1.7.9",
     "constructs": "^10.0.0",
+    "dotenv": "^16.4.7",
     "node-cron": "^3.0.3"
   }
 }
