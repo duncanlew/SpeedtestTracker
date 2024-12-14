@@ -4,7 +4,7 @@ import {runSpeedtest, saveSpeedTestResult} from "./speedtest";
 
 dotenv.config();
 
-cron.schedule('*/5 * * * *', async (result) => {
+cron.schedule('0 13 * * *', async (result) => {
     console.log('running cron with timestamp: ', new Date().toISOString());
 
     const url = process.env.URL as string;
