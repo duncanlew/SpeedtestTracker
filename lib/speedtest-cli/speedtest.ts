@@ -1,7 +1,7 @@
 import { exec } from 'child_process';
 import axios from "axios";
 
-function runSpeedtest(): Promise<any> {
+export function runSpeedtest(): Promise<any> {
     const command = 'speedtest --format=json';
 
     return new Promise((resolve, reject) => {
@@ -22,6 +22,25 @@ function runSpeedtest(): Promise<any> {
             }
         });
     });
+}
+
+export const saveSpeedTestResult = async (speedtestResult: any) => {
+    // Add more operations here
+    const url = 'url';
+    const headers = {
+        'Content-Type': 'application/json',
+        'x-api-key': 'YOUR_API_KEY_HERE' // Replace with your actual API key
+    };
+
+    const payload = {
+        pk: 'pk',
+        result: speedtestResult
+    }
+
+    // Make the POST request
+    const response = await axios.post(url, payload, {headers});
+
+    console.log('POST Response:', response.data);
 }
 
 // Use the function and store the result
