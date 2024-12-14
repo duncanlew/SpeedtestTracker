@@ -5,18 +5,19 @@ import {runSpeedtest, saveSpeedTestResult} from "./speedtest";
 dotenv.config();
 
 cron.schedule('*/5 * * * *', async (result) => {
+    console.log('running cron with timestamp: ', new Date().toISOString());
+
     const url = process.env.URL as string;
     const apiKey = process.env.API_KEY as string;
     const address = process.env.ADDRESS as string;
 
-    console.log({ apiKey, address, url });
-    console.log('running cron: ', new Date().toISOString());
-
     try {
-        // const speedtestResult = await runSpeedtest();
-        // const response = await saveSpeedTestResult(speedtestResult);
-        // console.log('response: ', response);
+        const speedtestResult = await runSpeedtest();
+        const response = await saveSpeedTestResult(speedtestResult, url, apiKey, address);
+        console.log('response: ', response);
     } catch (error) {
-        console.error('Error in runing cron: ', error);
+        console.error('Error in running cron: ', error);
     }
+
+    console.log('Cron execution finished with timestamp: ', new Date().toISOString());
 })
