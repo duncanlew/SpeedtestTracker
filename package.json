@@ -10,6 +10,7 @@
     "test": "jest",
     "cdk": "cdk",
     "speedtest": "node build/speedtest-cli/index.js",
+    "speedtest-production": "pm2 start build/speedtest-cli/index.js",
     "build-speedtest": "esbuild lib/speedtest-cli/index.ts --bundle --platform=node --sourcemap --target=node22 --legal-comments=none --outfile=build/speedtest-cli/index.js"
   },
   "devDependencies": {
