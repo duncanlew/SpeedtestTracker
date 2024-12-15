@@ -14,6 +14,12 @@ export class SpeedtestTrackerStack extends cdk.Stack {
       entry: path.resolve(__dirname, 'lambda-handler/index.ts'),
       runtime: lambda.Runtime.NODEJS_LATEST,
       handler: 'handler',
+      bundling: {
+        sourceMap: true
+      },
+      environment: {
+        NODE_OPTIONS: '--enable-source-maps'
+      },
     });
 
     const table = new dynamodb.TableV2(this, 'Table', {
