@@ -2,12 +2,12 @@ import {APIGatewayProxyEvent, APIGatewayProxyHandler, APIGatewayProxyResult, Con
 import {SpeedtestTrackerPayload, Todo} from "./models";
 import {putItem} from "./dynamodb";
 import {SpeedtestTrackerValidationError} from "./errors";
+import {logger} from "./logger";
 
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent, context: Context): Promise<APIGatewayProxyResult> => {
     try {
         const speedtestTrackerPayload = extractPayload(event);
-        console.log('SpeedtestTrackerPayload:');
-        console.log(speedtestTrackerPayload);
+        logger.info({data: speedtestTrackerPayload}, 'Received SpeedtestTrackerPayload');
 
         const putResponse = await putItem(speedtestTrackerPayload);
 
@@ -21,7 +21,7 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
             body: JSON.stringify(response, null, 2),
         };
     } catch (error) {
-        console.error("Error in the lambda handler", error);
+        logger.error("Error in the lambda handler", error);
 
         let statusCode: number;
         let message: string;

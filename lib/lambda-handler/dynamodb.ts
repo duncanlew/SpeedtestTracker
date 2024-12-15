@@ -1,6 +1,7 @@
 import {DynamoDBClient} from "@aws-sdk/client-dynamodb";
 import {DynamoDBDocumentClient, PutCommand, QueryCommand} from "@aws-sdk/lib-dynamodb";
 import {SpeedtestTrackerPayload} from "./models";
+import {logger} from "./logger";
 
 const TABLE_NAME = "speedtest-tracker"
 const client = new DynamoDBClient({});
@@ -33,7 +34,7 @@ export const getItems = async (pk: string) => {
     )
 
     const response = await docClient.send(command);
-    console.log(response);
+    logger.info({data: response}, `getItems response`);
     return response.Items;
 }
 
