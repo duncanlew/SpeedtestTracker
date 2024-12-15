@@ -2,9 +2,10 @@ import {APIGatewayProxyEvent, APIGatewayProxyHandler, APIGatewayProxyResult, Con
 import {SpeedtestTrackerPayload, Todo} from "./models";
 import {putItem} from "./dynamodb";
 import {SpeedtestTrackerValidationError} from "./errors";
-import {logger} from "./logger";
+import {logger, withRequest} from "./logger";
 
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent, context: Context): Promise<APIGatewayProxyResult> => {
+    withRequest(event, context);
     try {
         const speedtestTrackerPayload = extractPayload(event);
         logger.info({data: speedtestTrackerPayload}, 'Received SpeedtestTrackerPayload');
