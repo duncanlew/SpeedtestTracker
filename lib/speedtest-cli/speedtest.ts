@@ -1,5 +1,6 @@
 import { exec } from 'child_process';
 import axios from "axios";
+import {SpeedtestTrackerPayload} from "../lambda-handler/models";
 
 export function runSpeedtest(): Promise<any> {
     const command = 'speedtest --format=json';
@@ -30,7 +31,7 @@ export const saveSpeedTestResult = async (speedtestResult: any, url: string, api
         'x-api-key':  apiKey
     };
 
-    const payload = {
+    const payload: SpeedtestTrackerPayload = {
         pk: address,
         result: speedtestResult
     }
