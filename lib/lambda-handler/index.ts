@@ -1,5 +1,5 @@
 import {APIGatewayProxyEvent, APIGatewayProxyHandler, APIGatewayProxyResult, Context} from "aws-lambda";
-import {SpeedtestTrackerPayload, Todo} from "./models";
+import {SpeedtestTrackerPayload} from "./models";
 import {putItem} from "./dynamodb";
 import {SpeedtestTrackerValidationError} from "./errors";
 import {logger, withRequest} from "./logger";
