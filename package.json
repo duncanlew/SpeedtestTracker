@@ -9,8 +9,9 @@
     "watch": "tsc -w",
     "test": "jest",
     "cdk": "cdk",
-    "speedtest": "node build/speedtest-cli/index.js",
+    "speedtest-dev": "node build/speedtest-cli/index.js",
     "speedtest-production": "pm2 start build/speedtest-cli/index.js",
+    "prebuild-speedtest": "rm -rf build",
     "build-speedtest": "esbuild lib/speedtest-cli/index.ts --bundle --platform=node --sourcemap --target=node22 --legal-comments=none --outfile=build/speedtest-cli/index.js"
   },
   "devDependencies": {
