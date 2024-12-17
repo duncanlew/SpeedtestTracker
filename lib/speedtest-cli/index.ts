@@ -1,11 +1,12 @@
 import * as cron from 'node-cron';
 import * as dotenv from 'dotenv';
 import {runSpeedtest, saveSpeedTestResult} from "./speedtest";
+import {logger} from "../lambda-handler/logger";
 
 dotenv.config();
 
 cron.schedule('0 13 * * *', async (result) => {
-    console.log('running cron with timestamp: ', new Date().toISOString());
+    logger.info(`running cron with timestamp: ${new Date().toISOString()}`);
 
     const url = process.env.URL as string;
     const apiKey = process.env.API_KEY as string;
@@ -13,11 +14,10 @@ cron.schedule('0 13 * * *', async (result) => {
 
     try {
         const speedtestResult = await runSpeedtest();
-        const response = await saveSpeedTestResult(speedtestResult, url, apiKey, address);
-        console.log('response: ', response);
+        await saveSpeedTestResult(speedtestResult, url, apiKey, address);
     } catch (error) {
-        console.error('Error in running cron: ', error);
+        logger.error({error}, 'Error in running the cron job');
     }
 
-    console.log('Cron execution finished with timestamp: ', new Date().toISOString());
+    logger.info(`Cron execution finished with timestamp: ${new Date().toISOString()}`);
 })

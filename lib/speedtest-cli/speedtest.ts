@@ -1,6 +1,7 @@
 import { exec } from 'child_process';
 import axios from "axios";
 import {SpeedtestTrackerPayload} from "../lambda-handler/models";
+import {logger} from "../lambda-handler/logger";
 
 export function runSpeedtest(): Promise<any> {
     const command = 'speedtest --format=json';
@@ -39,5 +40,5 @@ export const saveSpeedTestResult = async (speedtestResult: any, url: string, api
     // Make the POST request
     const response = await axios.post(url, payload, {headers});
 
-    console.log('POST Response:', response.data);
+    logger.info({data: response.data}, 'POST Response');
 }
