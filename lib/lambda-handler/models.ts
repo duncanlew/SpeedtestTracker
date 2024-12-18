@@ -1,9 +1,9 @@
 export interface SpeedtestTrackerPayload {
     pk: string;
-    result: SpeedtestResult;
+    result: SpeedtestResultDto;
 }
 
-export interface SpeedtestResult {
+export interface SpeedtestResultDto {
     download: BandwidthResult;
     upload: BandwidthResult;
     interface: NetworkInterface;
@@ -16,7 +16,7 @@ export interface SpeedtestResult {
     type: string;
 }
 
-export interface SpeedtestResultConverted extends SpeedtestResult {
+export interface SpeedtestResult extends SpeedtestResultDto {
     downloadMbps: number;
     uploadMbps: number;
     pingMs: number;

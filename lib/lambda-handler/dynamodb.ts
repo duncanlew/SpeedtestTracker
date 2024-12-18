@@ -1,13 +1,13 @@
 import {DynamoDBClient} from "@aws-sdk/client-dynamodb";
 import {DynamoDBDocumentClient, PutCommand, QueryCommand} from "@aws-sdk/lib-dynamodb";
-import {SpeedtestResultConverted, SpeedtestTrackerPayload} from "./models";
+import {SpeedtestResult, SpeedtestTrackerPayload} from "./models";
 import {logger} from "./logger";
 
 const TABLE_NAME = "speedtest-tracker"
 const client = new DynamoDBClient({});
 const docClient = DynamoDBDocumentClient.from(client);
 
-export const putItem = async (primaryKey: string, speedtestResultConverted: SpeedtestResultConverted) => {
+export const putItem = async (primaryKey: string, speedtestResult: SpeedtestResult) => {
     const now = new Date();
 
     const command = new PutCommand({
@@ -16,10 +16,10 @@ export const putItem = async (primaryKey: string, speedtestResultConverted: Spee
             pk: primaryKey,
             epochTime: toEpochSeconds(now.getTime()),
             date: now.toISOString(),
-            payload: speedtestResultConverted,
-            downloadMbps: speedtestResultConverted.downloadMbps,
-            uploadMbps: speedtestResultConverted.uploadMbps,
-            pingMs: speedtestResultConverted.pingMs
+            payload: speedtestResult,
+            downloadMbps: speedtestResult.downloadMbps,
+            uploadMbps: speedtestResult.uploadMbps,
+            pingMs: speedtestResult.pingMs
         },
     });
 
