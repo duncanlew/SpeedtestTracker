@@ -16,6 +16,12 @@ export interface SpeedtestResult {
     type: string;
 }
 
+export interface SpeedtestResultConverted extends SpeedtestResult {
+    downloadMbps: number;
+    uploadMbps: number;
+    pingMs: number;
+}
+
 interface BandwidthResult {
     bandwidth: number;
     bytes: number;
