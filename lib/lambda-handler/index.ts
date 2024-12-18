@@ -5,23 +5,19 @@ import {SpeedtestTrackerValidationError} from "./errors";
 import {logger, withRequest} from "./logger";
 
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent, context: Context): Promise<APIGatewayProxyResult> => {
-    withRequest(event, context);
     try {
-        const payload = extractPayload(event);
-        logger.info({data: payload}, 'Received SpeedtestTrackerPayload');
+        withRequest(event, context);
+        logger.info({data: event}, 'Received event');
 
+        const payload = extractPayload(event);
         const primaryKey = payload.pk;
         const speedtestResult = getSpeedtestResult(payload.result);
-        const putResponse = await putItem(primaryKey, speedtestResult);
 
-        const response = {
-            speedtestTrackerPayload: payload,
-            putResponse,
-        };
+        const putResponse = await putItem(primaryKey, speedtestResult);
 
         return {
             statusCode: 200,
-            body: JSON.stringify(response, null, 2),
+            body: JSON.stringify(putResponse, null, 2),
         };
     } catch (error) {
         logger.error("Error in the lambda handler", error);
