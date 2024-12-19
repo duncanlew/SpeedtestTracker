@@ -18,7 +18,9 @@ export class SpeedtestTrackerStack extends cdk.Stack {
         sourceMap: true
       },
       environment: {
-        NODE_OPTIONS: '--enable-source-maps'
+        NODE_OPTIONS: '--enable-source-maps',
+        BOT_TOKEN: process.env.BOT_TOKEN!,
+        CHAT_ID: process.env.CHAT_ID!,
       },
     });
 
