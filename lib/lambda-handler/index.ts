@@ -3,6 +3,7 @@ import {SpeedtestResultDto, SpeedtestResult, SpeedtestTrackerPayload} from "./mo
 import {putItem} from "./dynamodb";
 import {SpeedtestTrackerValidationError} from "./errors";
 import {logger, withRequest} from "./logger";
+import {sendTelegramMessage} from "./telegram";
 
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent, context: Context): Promise<APIGatewayProxyResult> => {
     try {
@@ -10,18 +11,18 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
         logger.info({data: event}, 'Received event');
 
         const payload = extractPayload(event);
-        const primaryKey = payload.pk;
-        const speedtestResult = getSpeedtestResult(payload.result);
+        const {pk: primaryKey, result: speedtestResultDto} = payload;
+        const speedtestResult = getSpeedtestResult(speedtestResultDto);
+        const telegramMessage = constructSuccessMessage(primaryKey, speedtestResult);
 
         const putResponse = await putItem(primaryKey, speedtestResult);
-
+        await sendTelegramMessage(telegramMessage);
         return {
             statusCode: 200,
             body: JSON.stringify(putResponse, null, 2),
         };
     } catch (error) {
         logger.error("Error in the lambda handler", error);
-
         let statusCode: number;
         let message: string;
 
@@ -40,6 +41,8 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
                 break;
         }
 
+        const telegramMessage = constructFailureMessage(JSON.stringify(error));
+        await sendTelegramMessage(telegramMessage)
         return {
             statusCode,
             body: JSON.stringify(message),
@@ -64,3 +67,11 @@ const getSpeedtestResult = (speedtestResultDto: SpeedtestResultDto): SpeedtestRe
     }
 }
 
+const constructSuccessMessage = (primaryKey: string, speedtestResult: SpeedtestResult) => {
+    const { downloadMbps, uploadMbps} = speedtestResult;
+    return `Speedtest was successfully run for ${primaryKey} with the following results:\n - download speed: ${downloadMbps} mbps\n - upload speed: ${uploadMbps} mbps`;
+}
+
+const constructFailureMessage = (errorMessage: string) => {
+    return `An error occurred in the SpeedtestTracker Lambda: ${errorMessage}`;
+}
