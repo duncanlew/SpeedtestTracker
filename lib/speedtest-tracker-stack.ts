@@ -5,6 +5,9 @@ import * as lambda from "aws-cdk-lib/aws-lambda";
 import * as dynamodb from "aws-cdk-lib/aws-dynamodb";
 import * as path from 'node:path';
 import {NodejsFunction} from "aws-cdk-lib/aws-lambda-nodejs";
+import * as dotenv from "dotenv";
+
+dotenv.config();
 
 export class SpeedtestTrackerStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps){
@@ -18,7 +21,9 @@ export class SpeedtestTrackerStack extends cdk.Stack {
         sourceMap: true
       },
       environment: {
-        NODE_OPTIONS: '--enable-source-maps'
+        NODE_OPTIONS: '--enable-source-maps',
+        BOT_TOKEN: process.env.BOT_TOKEN!,
+        CHAT_ID: process.env.CHAT_ID!,
       },
     });
 
