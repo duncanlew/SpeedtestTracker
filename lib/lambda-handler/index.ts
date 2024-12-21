@@ -31,11 +31,9 @@ export const handler: APIGatewayProxyHandler = async (
     );
 
     const putResponse = await putItem(primaryKey, speedtestResult);
+
     await sendTelegramMessage(telegramMessage);
-    return {
-      statusCode: 200,
-      body: JSON.stringify(putResponse, null, 2),
-    };
+    return successResponse(JSON.stringify(putResponse, null, 2));
   } catch (error) {
     logger.error("Error in the lambda handler", error);
     let statusCode: number;
@@ -56,13 +54,29 @@ export const handler: APIGatewayProxyHandler = async (
         break;
     }
 
-    const telegramMessage = constructFailureMessage(JSON.stringify(error));
+    const stringifiedMessage = JSON.stringify(message, null, 2);
+    const telegramMessage = constructFailureMessage(stringifiedMessage);
+
     await sendTelegramMessage(telegramMessage);
-    return {
-      statusCode,
-      body: JSON.stringify(message),
-    };
+    return errorResponse(statusCode, stringifiedMessage);
   }
+};
+
+const successResponse = (message: string): APIGatewayProxyResult => {
+  return {
+    statusCode: 200,
+    body: message,
+  };
+};
+
+const errorResponse = (
+  errorCode: number,
+  message: string,
+): APIGatewayProxyResult => {
+  return {
+    statusCode: errorCode,
+    body: message,
+  };
 };
 
 const extractPayload = (event: APIGatewayProxyEvent) => {
@@ -88,10 +102,13 @@ const constructSuccessMessage = (
   primaryKey: string,
   speedtestResult: SpeedtestResult,
 ) => {
-  const { downloadMbps, uploadMbps } = speedtestResult;
-  return `Speedtest was successfully run for ${primaryKey} with the following results:\n - download speed: ${downloadMbps} mbps\n - upload speed: ${uploadMbps} mbps`;
+  const { downloadMbps, uploadMbps, pingMs } = speedtestResult;
+  return `📢Speedtest was successfully run for ${primaryKey} with the following results:
+- ⬇️download speed: ${downloadMbps} mbps
+- ⬆️upload speed: ${uploadMbps} mbps
+- ⚡ping: ${pingMs} ms`;
 };
 
 const constructFailureMessage = (errorMessage: string) => {
-  return `An error occurred in the SpeedtestTracker Lambda: ${errorMessage}`;
+  return `❌An error occurred in the SpeedtestTracker Lambda: ${errorMessage}`;
 };
