@@ -35,7 +35,7 @@ export const handler: APIGatewayProxyHandler = async (
     await sendTelegramMessage(telegramMessage);
     return successResponse(JSON.stringify(putResponse, null, 2));
   } catch (error) {
-    logger.error({ error }, "Error in the lambda handler");
+    logger.error(error, "Error in the lambda handler");
     let statusCode: number;
     let message: string;
 
