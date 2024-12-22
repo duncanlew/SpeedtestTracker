@@ -9,6 +9,7 @@
     "watch": "tsc -w",
     "test": "jest",
     "cdk": "cdk",
+    "ajv": "ts-node lib/lambda-handler/schema.ts",
     "prettier": "npx prettier . --write",
     "speedtest-dev": "node build/speedtest-cli/index.js",
     "speedtest-production": "pm2 start build/speedtest-cli/index.js",
