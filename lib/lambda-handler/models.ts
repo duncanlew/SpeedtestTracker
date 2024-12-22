@@ -22,21 +22,21 @@ export interface SpeedtestResult extends SpeedtestResultDto {
   pingMs: number;
 }
 
-interface BandwidthResult {
+export interface BandwidthResult {
   bandwidth: number;
   bytes: number;
   elapsed: number;
   latency: Latency;
 }
 
-interface Latency {
+export interface Latency {
   high: number;
   iqm: number;
   jitter: number;
   low: number;
 }
 
-interface NetworkInterface {
+export interface NetworkInterface {
   externalIp: string;
   internalIp: string;
   isVpn: boolean;
@@ -44,20 +44,20 @@ interface NetworkInterface {
   name: string;
 }
 
-interface PingResult {
+export interface PingResult {
   high: number;
   jitter: number;
   latency: number;
   low: number;
 }
 
-interface ResultDetails {
+export interface ResultDetails {
   id: string;
   persisted: boolean;
   url: string;
 }
 
-interface ServerDetails {
+export interface ServerDetails {
   country: string;
   host: string;
   id: number;
