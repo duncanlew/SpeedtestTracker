@@ -13,6 +13,7 @@ import { putItem } from "./dynamodb";
 import { SpeedtestTrackerValidationError } from "./errors";
 import { logger, withRequest } from "./logger";
 import { sendTelegramMessage } from "./telegram";
+import {validate} from "./schema";
 
 export const handler: APIGatewayProxyHandler = async (
   event: APIGatewayProxyEvent,
@@ -84,7 +85,14 @@ const extractPayload = (event: APIGatewayProxyEvent) => {
     throw new SpeedtestTrackerValidationError("Payload may not be empty");
   }
 
-  return JSON.parse(event.body) as SpeedtestTrackerPayload;
+  const parsedBody = JSON.parse(event.body);
+
+  const isValid = validate(parsedBody)
+  if (!isValid) {
+    throw new SpeedtestTrackerValidationError(`JSON validation failed with error: ${JSON.stringify(validate.errors)}`);
+  }
+
+  return parsedBody as SpeedtestTrackerPayload;
 };
 
 const getSpeedtestResult = (
