@@ -117,5 +117,4 @@ const speedtestTrackerPayloadSchema: JSONSchemaType<SpeedtestTrackerPayload> = {
     required: ["pk", "result"],
 }
 
-const validate = ajv.compile(speedtestTrackerPayloadSchema);
-// TODO validate gebruiken en checken of er incorrecte resultaten in geladen kunnen worden
+export const validate = ajv.compile(speedtestTrackerPayloadSchema);
