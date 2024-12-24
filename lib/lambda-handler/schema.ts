@@ -99,7 +99,6 @@ const speedtestResultDtoSchema: JSONSchemaType<SpeedtestResultDto> = {
         "upload",
         "interface",
         "isp",
-        "packetLoss",
         "ping",
         "result",
         "server",

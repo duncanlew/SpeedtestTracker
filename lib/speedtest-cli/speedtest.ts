@@ -42,7 +42,6 @@ export const saveSpeedTestResult = async (
     result: speedtestResult,
   };
 
-  // Make the POST request
   const response = await axios.post(url, payload, { headers });
 
   logger.info({ data: response.data }, "POST Response");
