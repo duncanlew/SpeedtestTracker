@@ -1,9 +1,9 @@
 import { exec } from "child_process";
 import axios from "axios";
-import { SpeedtestTrackerPayload } from "../lambda-handler/models";
+import {SpeedtestResultDto, SpeedtestTrackerPayload} from "../lambda-handler/models";
 import { logger } from "../lambda-handler/logger";
 
-export function runSpeedtest(): Promise<any> {
+export function runSpeedtest(): Promise<SpeedtestResultDto> {
   const command = "speedtest --format=json";
 
   return new Promise((resolve, reject) => {
@@ -27,7 +27,7 @@ export function runSpeedtest(): Promise<any> {
 }
 
 export const saveSpeedTestResult = async (
-  speedtestResult: any,
+  speedtestResult: SpeedtestResultDto,
   url: string,
   apiKey: string,
   address: string,

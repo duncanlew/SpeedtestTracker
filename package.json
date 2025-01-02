@@ -1,6 +1,9 @@
 {
   "name": "speedtest-tracker",
   "version": "0.1.0",
+  "engines": {
+    "node": ">=22"
+  },
   "bin": {
     "speedtest-tracker": "bin/speedtest-tracker.js"
   },
